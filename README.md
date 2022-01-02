@@ -10,7 +10,8 @@
 ## Then user should be able to see all highscores
 
 ## URL: https://demkoa01.github.io/JavaScrpit-Quiz/
-## Image: 
+## Image: ![ScreenShot](https://user-images.githubusercontent.com/93881224/147891166-7e06a280-1f48-4957-ba63-c7b6078bb81e.JPG)
+
 
 ## Current Issues with App:
 ### Time refreshes each time the user moves to a new question
