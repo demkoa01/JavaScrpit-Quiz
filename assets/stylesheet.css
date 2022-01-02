@@ -229,20 +229,6 @@ footer{
     border-top: 1px solid lightgrey;
 }
 
-footer .total_que span{
-    display: flex;
-    user-select: none;
-}
-
-footer .total_que span p{
-    font-weight: 500;
-    padding: 0 5px;
-}
-
-footer .total_que span p:first-child{
-    padding-left: 0px;
-}
-
 footer button{
     height: 40px;
     padding: 0 13px;
@@ -346,4 +332,17 @@ footer button.show{
 .buttons button.quit:hover{
     color: white;
     background: var(--primaryColor);
+}
+
+.input .initials-input {
+    border: none;
+    outline: none;
+
+}
+
+.save-btn {
+    color: white;
+    background: var(--primaryColor);
+    border: none;
+    border-radius: 5px;
 }

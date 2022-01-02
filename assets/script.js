@@ -54,6 +54,11 @@ const result_box = document.querySelector(".result_box");
 const option_list = document.querySelector(".option_list");
 const timeText = document.querySelector(".timer .time_left_txt");
 const timeCount = document.querySelector(".timer .timer_sec");
+const scoreAreaEl = document.querySelector('#scoreArea');
+const inNameEl = document.querySelector('#inName');
+const buttonDivEl = document.querySelector('#saveButton');
+const highScoreEl = document.querySelector('#highScores');
+const scorePageEl = document.querySelector('#userScore');
 
 // if startQuiz button clicked, show the rules box
 start_btn.onclick = ()=>{
@@ -72,8 +77,7 @@ continue_btn.onclick = ()=>{
     showQuetions(0); //calling showQestions function
     queCounter(1); //passing 1 parameter to queCounter
     startTimer(45); //calling startTimer function
-    startTimerLine(0); //calling startTimerLine function
-}
+};
 
 // variables for time & keeping track of questions
 let timeValue =  45;
@@ -102,7 +106,6 @@ restart_quiz.onclick = ()=>{
     clearInterval(counter); 
     clearInterval(counterLine);
     startTimer(timeValue);
-    startTimerLine(widthValue); 
     timeText.textContent = "Time Left"; 
     next_btn.classList.remove("show"); 
 }
@@ -125,8 +128,7 @@ next_btn.onclick = ()=>{
         queCounter(que_numb); 
         clearInterval(counter);
         clearInterval(counterLine); 
-        startTimer(timeValue); 
-        startTimerLine(widthValue); 
+        startTimer(timeValue);
         timeText.textContent = "Time Left"; 
         next_btn.classList.remove("show"); 
     }
@@ -175,12 +177,12 @@ function optionSelected(answer){
         userScore += 1; 
         answer.classList.add("correct"); 
         answer.insertAdjacentHTML("beforeend", tickIconTag); 
+        console.log(timeValue);
     }
     // if the user didnt get the correct answer
     else{
         answer.classList.add("incorrect");
         answer.insertAdjacentHTML("beforeend", crossIconTag); 
-
         // show the user what the correct answer was 
         for(i=0; i < allOptions; i++){
             if(option_list.children[i].textContent == correcAns){  
@@ -188,6 +190,7 @@ function optionSelected(answer){
                 option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); 
             }
         }
+       // return timeValue;
     }
 
     // dont let the user pick a new answer after they have already picked one whether correct or incorrect
@@ -207,19 +210,67 @@ function showResult(){
     // display the number the user got correct
     let scoreTag = '<span>Congrats! You got <p>'+ userScore +'</p> correct!</span>';
     scoreText.innerHTML = scoreTag; 
+
+    initTextEl = document.createElement("input"); 
+    initTextEl.setAttribute("id", "initails-input"); 
+    initTextEl.setAttribute("type", "text"); 
+    initTextEl.setAttribute("name", "iniatials"); 
+    initTextEl.setAttribute("placeholder", "Enter Initials here"); 
+      
+    inNameEl.appendChild(initTextEl);
+
+
+    // create save button element
+    saveButtonEl = document.createElement("button");
+    saveButtonEl.setAttribute("id" , "save-btn");
+    saveButtonEl.setAttribute("class" ,"save-btn");
+    saveButtonEl.setAttribute("type" , "submit");
+    saveButtonEl.textContent = "Save Score";
+
+    inNameEl.appendChild(saveButtonEl);
+
+    inNameEl.addEventListener("submit", viewHighScores);
 }
+
+function viewHighScores (e) { 
+  e.preventDefault();
+    var name = document.querySelector("#initails-input").value;
+    savedInit(name);
+    
+    scorePageEl.replaceWith(highScoreEl)
+    loadSaveScores();
+  
+}
+
+//function to save task in local storage 
+var savedScore = function() {
+    localStorage.setItem("userScore", JSON.stringify(userScore));
+}
+var savedInit = function(initails) {
+    localStorage.setItem("initails", JSON.stringify(initails));
+}
+
+// gets tasks from local storage and load them
+function loadSaveScores() {
+    // get tasks items from local stroage
+    var savedScore = localStorage.getItem("userScore");
+    var savedInit = localStorage.getItem("initails");
+
+    savedScore  = JSON.parse(savedScore);
+    savedInit = JSON.parse(savedInit);
+}   
 
 function startTimer(time){
     counter = setInterval(timer, 1000);
     function timer(){
         // time should decrease by 1 second as long as user has not answered yet
         timeCount.textContent = time; 
-        time--; 
+        time--;
+
         if(time < 0){ //if timer is less than 0
             clearInterval(counter); //clear counter
-            timeText.textContent = "Time Off"; //change the time text to time off
-            const allOptions = option_list.children.length; //getting all option items
-            let correcAns = questions[que_count].answer; //getting correct answer from array
+             const allOptions = option_list.children.length; //getting all option items
+             let correcAns = questions[que_count].answer; //getting correct answer from array
             for(i=0; i < allOptions; i++){
                 if(option_list.children[i].textContent == correcAns){ //if there is an option which is matched to an array answer
                     option_list.children[i].setAttribute("class", "option correct"); //adding green color to matched option
@@ -232,20 +283,6 @@ function startTimer(time){
             next_btn.classList.add("show"); //show the next button if user selected any option
         }
     }
+    return time;
 }
 
-function startTimerLine(time){
-    counterLine = setInterval(timer, 29);
-    function timer(){
-        time += 1; //upgrading time value with 1
-        if(time > 549){ //if time value is greater than 549
-            clearInterval(counterLine); //clear counterLine
-        }
-    }
-}
-
-function queCounter(index){
-    //creating a new span tag and passing the question number and total question
-    let totalQueCounTag = '<span><p>'+ index +'</p> of <p>'+ questions.length +'</p> Questions</span>';
-    bottom_ques_counter.innerHTML = totalQueCounTag;  //adding new span tag inside bottom_ques_counter
-}
