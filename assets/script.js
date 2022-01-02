@@ -35,11 +35,13 @@ let questions = [
   },
     {
     numb: 4,
-    question: "True or False: The JavaScript file itself must contain the <script> tag?",
-    answer: "False",
+    question: "Commonly used data types do not include which of the following:",
+    answer: "Alerts",
     options: [
-      "True",
-      "False"
+      "Alerts",
+      "Strings",
+      "Numbers",
+      "Booleans"
     ]
   },
 ];
